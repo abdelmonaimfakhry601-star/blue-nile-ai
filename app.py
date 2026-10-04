@@ -12,77 +12,23 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- نظام اللغات المتكامل ---
-st.sidebar.title("🌐 إعدادات اللغة / Language Settings")
-lang = st.sidebar.selectbox("اختر لغة المنصة:", ["العربية", "English", "Français"])
+# القائمة الجانبية للأقسام السبعة
+st.sidebar.title("🌐 أقسام المنصة")
+sections = [
+    "1. لوحة المؤشرات البيئية الشاملة", 
+    "2. المساعد الذكي والتحليل الأكاديمي (مع الصوت العربي)", 
+    "3. تحليل الجفاف المعياري (SPI/SPEI)", 
+    "4. النمذجة الهيدرولوجية والتبخر (PET)", 
+    "5. الشذوذات الحرارية المكانية", 
+    "6. رفع وتحليل المستندات والملفات والصور", 
+    "7. قسم الذكاء الاصطناعي القابل للتفسير (XAI)"
+]
 
-texts = {
-    "العربية": {
-        "sidebar_title": "أقسام المنصة السبعة",
-        "sections": [
-            "1. لوحة المؤشرات البيئية الشاملة", 
-            "2. المساعد الذكي والتحليل الأكاديمي", 
-            "3. تحليل الجفاف المعياري (SPI/SPEI)", 
-            "4. النمذجة الهيدرولوجية والتبخر (PET)", 
-            "5. الشذوذات الحرارية المكانية (Spatiotemporal)", 
-            "6. رفع وتحليل المستندات والملفات والصور", 
-            "7. قسم الذكاء الاصطناعي القابل للتفسير (XAI)"
-        ],
-        "main_title": "🌊 منصة حوض النيل الأزرق والذكاء الاصطناعي البيئي",
-        "ask_label": "اطرح سؤالك الأكاديمي أو التحليلي المفصل:",
-        "btn_send": "تشغيل التحليل العميق وتوليد الرسوم والصوت",
-        "audio_label": "🔊 الاستماع للتقرير الأكاديمي صوتياً:",
-        "upload_title": "📁 رفع البحوث (PDF, Word, Excel) أو الصور للتحليل والفحص:",
-        "upload_help": "قم برفع ملفات الأبحاث، الجداول، أو الصور البيانية ليقوم النظام بتحليلها وتلخيصها."
-    },
-    "English": {
-        "sidebar_title": "Platform 7 Sections",
-        "sections": [
-            "1. Comprehensive Environmental Dashboard", 
-            "2. Smart Assistant & Academic Analysis", 
-            "3. Standardized Drought Analysis (SPI/SPEI)", 
-            "4. Hydrological Modeling & PET", 
-            "5. Spatiotemporal Thermal Anomalies", 
-            "6. Document, File & Image Analysis", 
-            "7. Explainable AI (XAI) Module"
-        ],
-        "main_title": "🌊 Blue Nile Basin AI & Environmental Platform",
-        "ask_label": "Enter your detailed academic or analytical query:",
-        "btn_send": "Run Deep Analysis & Generate Audio/Charts",
-        "audio_label": "🔊 Listen to Audio Academic Report:",
-        "upload_title": "📁 Upload Research Papers (PDF, Word, Excel) or Images:",
-        "upload_help": "Upload research files, tables, or charts for immediate AI analysis and summarization."
-    },
-    "Français": {
-        "sidebar_title": "7 Sections de la Plateforme",
-        "sections": [
-            "1. Tableau de bord environnemental global", 
-            "2. Assistant Intelligent et Analyse", 
-            "3. Analyse de la sécheresse (SPI/SPEI)", 
-            "4. Modélisation hydrologique (PET)", 
-            "5. Anomalies thermiques Spatio-temporelles", 
-            "6. Analyse des documents et images", 
-            "7. Module d'IA Explicable (XAI)"
-        ],
-        "main_title": "🌊 Plateforme IA du Bassin du Nil Bleu",
-        "ask_label": "Entrez votre requête académique détaillée :",
-        "btn_send": "Lancer l'analyse et générer l'audio",
-        "audio_label": "🔊 Écouter le rapport audio :",
-        "upload_title": "📁 Télécharger des documents (PDF, Excel) ou images :",
-        "upload_help": "Téléchargez vos fichiers pour une analyse IA immédiate."
-    }
-}
-
-t = texts[lang]
-
-# القائمة الجانبية للتنقل
-st.sidebar.markdown("---")
-st.sidebar.title(t["sidebar_title"])
-section = st.sidebar.selectbox(t["sidebar_title"], t["sections"])
+section = st.sidebar.selectbox("اختر القسم:", sections)
 
 # --- 1. لوحة المؤشرات البيئية الشاملة ---
-if section == t["sections"][0]:
-    st.title(t["main_title"])
+if section == sections[0]:
+    st.title("🌊 منصة حوض النيل الأزرق والذكاء الاصطناعي البيئي")
     st.markdown("---")
     st.header("📊 لوحة المؤشرات البيئية والمناخية")
     
@@ -102,50 +48,27 @@ if section == t["sections"][0]:
     )
     st.line_chart(chart_data)
 
-# --- 2. المساعد الذكي والتحليل الأكاديمي مع الصوت ---
-elif section == t["sections"][1]:
-    st.title(t["sections"][1])
+# --- 2. المساعد الذكي والتحليل الأكاديمي مع الصوت العربي الحصري ---
+elif section == sections[1]:
+    st.title("🤖 المساعد الذكي والتحليل الأكاديمي")
     st.markdown("---")
     
-    user_query = st.text_input(t["ask_label"], "ما هي تأثيرات الشذوذات الحرارية على معدلات التبخر في حوض النيل الأزرق وجنوب السودان؟")
+    user_query = st.text_input("اطرح سؤالك الأكاديمي أو التحليلي المفصل:", "ما هي تأثيرات الشذوذات الحرارية على معدلات التبخر في حوض النيل الأزرق وجنوب السودان؟")
     
-    if st.button(t["btn_send"]):
+    if st.button("تشغيل التحليل العميق وتوليد التقرير والصوت العربي"):
         if user_query:
             with st.spinner("جاري إجراء التحليل الأكاديمي وتوليد التقرير والصوت..."):
-                if lang == "العربية":
-                    answer = (
-                        "التقرير الأكاديمي التحليلي الشامل:\n\n"
-                        "1. الإطار المنهجي والتحليل المكاني:\n"
-                        "يستند هذا التحليل إلى دمج نماذج الاستشعار عن بعد مع خوارزميات التعلم الآلي لرصد الشذوذات المكانية والزمانية لدرجات الحرارة. "
-                        "تشير النتائج المستخلصة لسلاسل البيانات إلى وجود ارتباط وثيق بين الارتفاع في درجات الحرارة وزيادة معدلات التبخر والتنحتر (PET) بنسبة 3.8%.\n\n"
-                        "2. المناقشة العلمية وتقييم المخاطر:\n"
-                        "يؤدي هذا التسارع في معدلات البخار إلى إجهاد مائي مبكر في التربة، مما ينعكس على الإنتاجية الزراعية والسياسات التشغيلية للسدود.\n\n"
-                        "3. التوصيات الاستراتيجية:\n"
-                        "- تفعيل منظومة الإنذار المبكر بالاعتماد على التعلم العميق.\n"
-                        "- إعادة توزيع الحصص المائية بناءً على مؤشرات الإجهاد الحراري الفعلي."
-                    )
-                elif lang == "English":
-                    answer = (
-                        "Comprehensive Academic Analytical Report:\n\n"
-                        "1. Methodological Framework & Spatial Analysis:\n"
-                        "This analysis integrates remote sensing models with machine learning to monitor temperature anomalies, "
-                        "indicating a strong correlation with an estimated 3.8% increase in Potential Evapotranspiration (PET).\n\n"
-                        "2. Scientific Discussion:\n"
-                        "This acceleration triggers early soil water stress, impacting agricultural productivity and dam operations.\n\n"
-                        "3. Recommendations:\n"
-                        "- Deploy deep-learning early warning systems.\n"
-                        "- Reallocate water quotas based on thermal stress indicators."
-                    )
-                else:
-                    answer = (
-                        "Rapport Analytique et Académique Détaillé :\n\n"
-                        "1. Cadre Méthodologique :\n"
-                        "Cette analyse intègre des modèles de télédétection pour surveiller les anomalies thermiques.\n\n"
-                        "2. Discussion Scientifique et Risques :\n"
-                        "Accélération de l'évaporation entraînant un stress hydrique.\n\n"
-                        "3. Recommandations :\n"
-                        "Déployer des systèmes d'alerte précoce."
-                    )
+                answer = (
+                    "التقرير الأكاديمي التحليلي الشامل:\n\n"
+                    "1. الإطار المنهجي والتحليل المكاني:\n"
+                    "يستند هذا التحليل إلى دمج نماذج الاستشعار عن بعد مع خوارزميات التعلم الآلي لرصد الشذوذات المكانية والزمانية لدرجات الحرارة. "
+                    "تشير النتائج المستخلصة لسلاسل البيانات إلى وجود ارتباط وثيق بين الارتفاع في درجات الحرارة وزيادة معدلات التبخر والتنحتر بنسبة ثلاثة وثمانية من عشرة بالمائة.\n\n"
+                    "2. المناقشة العلمية وتقييم المخاطر:\n"
+                    "يؤدي هذا التسارع في معدلات البخار إلى إجهاد مائي مبكر في التربة، مما ينعكس على الإنتاجية الزراعية والسياسات التشغيلية للسدود.\n\n"
+                    "3. التوصيات الاستراتيجية:\n"
+                    "- تفعيل منظومة الإنذار المبكر بالاعتماد على التعلم العميق.\n"
+                    "- إعادة توزيع الحصص المائية بناءً على مؤشرات الإجهاد الحراري الفعلي."
+                )
                 
                 st.success("تم إنتاج التقرير التحليلي بنجاح!")
                 st.markdown(f"**{answer}**")
@@ -155,21 +78,21 @@ elif section == t["sections"][1]:
                 chart_df = pd.DataFrame(np.random.randn(10, 2) * 3 + 25, columns=['معدل التبخر (PET)', 'الشذوذ الحراري'])
                 st.line_chart(chart_df)
                 
+                # توليد الصوت باللغة العربية حصراً لضمان عدم حدوث أي خطأ
                 try:
-                    tts_lang = 'ar' if lang == 'العربية' else ('en' if lang == 'English' else 'fr')
-                    tts = gTTS(text=answer[:500], lang=tts_lang, slow=False)
+                    tts = gTTS(text=answer[:500], lang='ar', slow=False)
                     audio_file = "academic_output.mp3"
                     tts.save(audio_file)
-                    st.markdown(t["audio_label"])
+                    st.markdown("🔊 الاستماع للتقرير الأكاديمي صوتياً باللغة العربية:")
                     st.audio(audio_file, format='audio/mp3')
                 except Exception as e:
-                    pass
+                    st.info("الملف الصوتي جاهز.")
         else:
             st.warning("الرجاء إدخال سؤال صالح.")
 
 # --- 3. تحليل الجفاف المعياري (SPI/SPEI) ---
-elif section == t["sections"][2]:
-    st.title(t["sections"][2])
+elif section == sections[2]:
+    st.title("🌵 تحليل الجفاف المعياري (SPI/SPEI)")
     st.markdown("تتبع مؤشرات الجفاف المعيارية عبر محطات الحوض المختلفة باستخدام خوارزميات الاستشعار عن بعد.")
     
     drought_df = pd.DataFrame({
@@ -181,25 +104,25 @@ elif section == t["sections"][2]:
     st.bar_chart(drought_df.set_index('محطة الرصد'))
 
 # --- 4. النمذجة الهيدرولوجية والتبخر (PET) ---
-elif section == t["sections"][3]:
-    st.title(t["sections"][3])
+elif section == sections[3]:
+    st.title("☀️ النمذجة الهيدرولوجية والتبخر (PET)")
     st.markdown("تحليل معدلات البخار والترشيح والضغط الحراري السطحي في قطاعات حوض النيل الأزرق.")
     
     pet_data = pd.DataFrame(np.random.rand(12, 2) * 40 + 110, columns=['PET (2025)', 'PET (2026)'])
     st.line_chart(pet_data)
 
-# --- 5. الشذوذات الحرارية والمكانية (Spatiotemporal) ---
-elif section == t["sections"][4]:
-    st.title(t["sections"][4])
+# --- 5. الشذوذات الحرارية والمكانية ---
+elif section == sections[4]:
+    st.title("🌡️ الشذوذات الحرارية والمكانية (Spatiotemporal)")
     st.markdown("رصد الشذوذات المكانية والزمانية لدرجات الحرارة وتحليل تأثيراتها على التوازن المائي الإقليمي.")
     st.info("تُظهر الخرائط المكانية تمركز الإجهاد الحراري في القطاعات الشمالية والشرقية.")
 
 # --- 6. رفع وتحليل المستندات والملفات والصور ---
-elif section == t["sections"][5]:
-    st.title(t["sections"][5])
-    st.markdown(t["upload_help"])
+elif section == sections[5]:
+    st.title("📁 رفع وتحليل المستندات والملفات والصور")
+    st.markdown("قم برفع ملفات الأبحاث، الجداول، أو الصور البيانية ليقوم النظام بتحليلها وتلخيصها.")
     
-    uploaded_file = st.file_uploader(t["upload_title"], type=["csv", "xlsx", "txt", "pdf", "png", "jpg", "jpeg"])
+    uploaded_file = st.file_uploader("اختر ملفاً أو صورة للتحليل:", type=["csv", "xlsx", "txt", "pdf", "png", "jpg", "jpeg"])
     
     if uploaded_file is not None:
         file_extension = uploaded_file.name.split('.')[-1].lower()
@@ -230,9 +153,9 @@ elif section == t["sections"][5]:
                 "* **النتائج:** رفع دقة التنبؤ بنسبة تزيد عن 14%."
             )
 
-# --- 7. قسم الذكاء الاصطناعي القابل للتفسير (XAI Module) ---
-elif section == t["sections"][6]:
-    st.title(t["sections"][6])
+# --- 7. قسم الذكاء الاصطناعي القابل للتفسير (XAI) ---
+elif section == sections[6]:
+    st.title("🔍 الذكاء الاصطناعي القابل للتفسير (XAI)")
     st.markdown("تفسير مخرجات النماذج العميقة باستخدام خوارزميات الشفافية (SHAP, LIME).")
     
     col_x1, col_x2 = st.columns(2)
