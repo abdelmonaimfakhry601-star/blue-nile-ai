@@ -1,5 +1,3 @@
-# استبدل "sk-..." بالمفتاح الخاص بك مباشرة
-openai.api_key = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 import streamlit as st
 import pandas as pd
 import numpy as np
