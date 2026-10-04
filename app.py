@@ -6,8 +6,7 @@ import os
 import datetime
 import openai
 
-# --- إعدادات مفتاح OpenAI (قم بوضع مفتاحك هنا أو عبر Secrets) ---
-#openai.api_key = "sk-..."  <-- ضع مفتاحك هنا إذا أردت، أو اتركه ليسحبه من إعدادات البيئة
+# --- إعدادات مفتاح OpenAI ---
 if "OPENAI_API_KEY" in os.environ:
     openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -81,7 +80,7 @@ texts = {
 
 t = texts[lang]
 
-# --- لمبات وعلامات الأمان السيبراني والتحديث الآلي ---
+# --- مؤشرات الأمان السيبراني ---
 st.sidebar.markdown("---")
 st.sidebar.markdown(f"### {t['security_title']}")
 col_sec1, col_sec2 = st.sidebar.columns(2)
@@ -139,7 +138,7 @@ elif section == t["sections"][1]:
     if st.button("إرسال السؤال إلى ChatGPT والحصول على الإجابة الحقيقية"):
         if user_query:
             if not openai.api_key:
-                st.error("⚠️ الرجاء إدخال مفتاح الـ OpenAI API Key الخاص بك في الكود أو في متغيرات البيئة لكي يعمل النظام بالذكاء الاصطناعي الحقيقي.")
+                st.error("⚠️ الرجاء إدخال مفتاح الـ OpenAI API Key الخاص بك في إعدادات البيئة (Environment Variables) أو عبر كود المنصة.")
             else:
                 with st.spinner("جاري التواصل مع نموذج ChatGPT وتحليل السؤال بدقة..."):
                     try:
@@ -156,7 +155,6 @@ elif section == t["sections"][1]:
                         st.markdown(f"### الإجابة العلمية المعتمدة:")
                         st.markdown(f"> {answer}")
                         
-                        # توليد صوت للإجابة
                         try:
                             tts = gTTS(text=answer[:500], lang='ar', slow=False)
                             audio_file = "chatgpt_output.mp3"
@@ -203,7 +201,7 @@ elif section == t["sections"][4]:
 # ==========================================
 elif section == t["sections"][5]:
     st.title(f"📁 {t['sections'][5]}")
-    st.markdown("قم برفع ملفك النصي أو البحث (TXT أو مستند) ليقوم ChatGPT بقراءته كلياً وتحليل هدفه الرئيسي ومحتواه بدقة مذهلة دون أي أخطاء.")
+    st.markdown("قم برفع ملفك النصي أو البحث (TXT أو جداول) ليقوم ChatGPT بقراءته كلياً وتحليل هدفه الرئيسي ومحتواه بدقة مذهلة دون أي أخطاء.")
     
     uploaded_file = st.file_uploader("اختر ملف البحث المرفوع:", type=["txt", "csv", "xlsx"])
     
@@ -233,7 +231,7 @@ elif section == t["sections"][5]:
                                     {"role": "system", "content": "أنت محلل علمي أكاديمي محترف. قم بتحليل النص التالي واستخراج الهدف الرئيسي، المنهجية، والنتائج والتوصيات بدقة شديدة."},
                                     {"role": "user", "content": file_text[:4000]}
                                 ]
-                            }
+                            )
                             analysis_result = response.choices[0].message.content
                             st.success("تم التحليل بنجاح بواسطة ChatGPT!")
                             st.markdown(f"### نتائج التحليل الذكي للملف:")
