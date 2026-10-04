@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- نظام اللغات المتكامل (عربي، إنجليزي، فرنسي) ---
+# --- نظام اللغات المتكامل ---
 st.sidebar.title("🌐 إعدادات اللغة / Language Settings")
 lang = st.sidebar.selectbox("اختر لغة المنصة:", ["العربية", "English", "Français"])
 
@@ -75,7 +75,7 @@ texts = {
 
 t = texts[lang]
 
-# القائمة الجانبية للتنقل (7 أقسام)
+# القائمة الجانبية للتنقل
 st.sidebar.markdown("---")
 st.sidebar.title(t["sidebar_title"])
 section = st.sidebar.selectbox(t["sidebar_title"], t["sections"])
@@ -102,9 +102,9 @@ if section == t["sections"][0]:
     )
     st.line_chart(chart_data)
 
-# --- 2. المساعد الذكي والتحليل الأكاديمي مع الصوت (Voice TTS) ---
+# --- 2. المساعد الذكي والتحليل الأكاديمي مع الصوت ---
 elif section == t["sections"][1]:
-    st.title(f"🤖 {t['sections'][1]}")
+    st.title(t["sections"][1])
     st.markdown("---")
     
     user_query = st.text_input(t["ask_label"], "ما هي تأثيرات الشذوذات الحرارية على معدلات التبخر في حوض النيل الأزرق وجنوب السودان؟")
@@ -150,13 +150,11 @@ elif section == t["sections"][1]:
                 st.success("تم إنتاج التقرير التحليلي بنجاح!")
                 st.markdown(f"**{answer}**")
                 
-                # رسم بياني توضيحي مرفق بالإجابة
                 st.markdown("---")
                 st.subheader("📉 منحنى التحليل التنبؤي:")
                 chart_df = pd.DataFrame(np.random.randn(10, 2) * 3 + 25, columns=['معدل التبخر (PET)', 'الشذوذ الحراري'])
                 st.line_chart(chart_df)
                 
-                # توليد الصوت (Text-to-Speech)
                 try:
                     tts_lang = 'ar' if lang == 'العربية' else ('en' if lang == 'English' else 'fr')
                     tts = gTTS(text=answer[:500], lang=tts_lang, slow=False)
@@ -165,13 +163,13 @@ elif section == t["sections"][1]:
                     st.markdown(t["audio_label"])
                     st.audio(audio_file, format='audio/mp3')
                 except Exception as e:
-                    st.info("الملف الصوتي جاهز.")
+                    pass
         else:
             st.warning("الرجاء إدخال سؤال صالح.")
 
 # --- 3. تحليل الجفاف المعياري (SPI/SPEI) ---
 elif section == t["sections"][2]:
-    st.title(f"🌵 {t['sections'][2]}")
+    st.title(t["sections"][2])
     st.markdown("تتبع مؤشرات الجفاف المعيارية عبر محطات الحوض المختلفة باستخدام خوارزميات الاستشعار عن بعد.")
     
     drought_df = pd.DataFrame({
@@ -184,7 +182,7 @@ elif section == t["sections"][2]:
 
 # --- 4. النمذجة الهيدرولوجية والتبخر (PET) ---
 elif section == t["sections"][3]:
-    st.title(f"☀️ {t['sections"][3]}")
+    st.title(t["sections"][3])
     st.markdown("تحليل معدلات البخار والترشيح والضغط الحراري السطحي في قطاعات حوض النيل الأزرق.")
     
     pet_data = pd.DataFrame(np.random.rand(12, 2) * 40 + 110, columns=['PET (2025)', 'PET (2026)'])
@@ -192,13 +190,13 @@ elif section == t["sections"][3]:
 
 # --- 5. الشذوذات الحرارية والمكانية (Spatiotemporal) ---
 elif section == t["sections"][4]:
-    st.title(f"🌡️ {t['sections'][4]}")
+    st.title(t["sections"][4])
     st.markdown("رصد الشذوذات المكانية والزمانية لدرجات الحرارة وتحليل تأثيراتها على التوازن المائي الإقليمي.")
     st.info("تُظهر الخرائط المكانية تمركز الإجهاد الحراري في القطاعات الشمالية والشرقية.")
 
 # --- 6. رفع وتحليل المستندات والملفات والصور ---
 elif section == t["sections"][5]:
-    st.title(f"📁 {t['sections'][5]}")
+    st.title(t["sections"][5])
     st.markdown(t["upload_help"])
     
     uploaded_file = st.file_uploader(t["upload_title"], type=["csv", "xlsx", "txt", "pdf", "png", "jpg", "jpeg"])
@@ -234,7 +232,7 @@ elif section == t["sections"][5]:
 
 # --- 7. قسم الذكاء الاصطناعي القابل للتفسير (XAI Module) ---
 elif section == t["sections"][6]:
-    st.title(f"🔍 {t['sections'][6]}")
+    st.title(t["sections"][6])
     st.markdown("تفسير مخرجات النماذج العميقة باستخدام خوارزميات الشفافية (SHAP, LIME).")
     
     col_x1, col_x2 = st.columns(2)
