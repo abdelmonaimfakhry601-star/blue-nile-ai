@@ -3,12 +3,7 @@ import pandas as pd
 import numpy as np
 from gtts import gTTS
 import os
-import datetime
 import openai
-
-# --- إعدادات مفتاح OpenAI ---
-if "OPENAI_API_KEY" in os.environ:
-    openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # إعدادات الصفحة
 st.set_page_config(
@@ -17,8 +12,16 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- شاشة البداية: اختيار اللغة ودولة حوض النيل الأزرق ---
+# --- شاشة البداية: إعدادات المنصة ومفتاح الـ API ---
 st.sidebar.title("🌐 إعدادات المنصة الشاملة")
+
+# إضافة خانة لإدخال مفتاح OpenAI API Key مباشرة من الواجهة لتفادي خطأ 401
+user_api_key = st.sidebar.text_input("🔑 أدخل مفتاح OpenAI API Key:", type="password", placeholder="sk-...")
+if user_api_key:
+    openai.api_key = user_api_key
+elif "OPENAI_API_KEY" in os.environ:
+    openai.api_key = os.environ["OPENAI_API_KEY"]
+
 lang = st.sidebar.selectbox("اختر لغة المنصة (Language):", ["العربية", "English", "Français"])
 
 country = st.sidebar.selectbox(
@@ -90,10 +93,6 @@ with col_sec2:
     st.markdown("🟢 **رصد التهديدات آمن**")
 
 st.sidebar.markdown("---")
-current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-st.sidebar.markdown(f"🔴 **التحديث الآلي للبيانات نشط:** `{current_time}`")
-
-st.sidebar.markdown("---")
 section = st.sidebar.selectbox("الأقسام العشرة للمنصة:", t["sections"])
 
 # ==========================================
@@ -136,34 +135,33 @@ elif section == t["sections"][1]:
     user_query = st.text_area("اطرح سؤالك الأكاديمي أو الهيدرولوجي المفصل:", "ما هي تأثيرات الشذوذات الحرارية على معدلات التبخر في حوض النيل الأزرق؟")
     
     if st.button("إرسال السؤال إلى ChatGPT والحصول على الإجابة الحقيقية"):
-        if user_query:
-            if not openai.api_key:
-                st.error("⚠️ الرجاء إدخال مفتاح الـ OpenAI API Key الخاص بك في إعدادات البيئة (Environment Variables) أو عبر كود المنصة.")
-            else:
-                with st.spinner("جاري التواصل مع نموذج ChatGPT وتحليل السؤال بدقة..."):
+        if not openai.api_key:
+            st.error("⚠️ يرجى إدخال مفتاح الـ OpenAI API Key الخاص بك في الشريط الجانبي (Sidebar) أولاً.")
+        elif user_query:
+            with st.spinner("جاري التواصل مع نموذج ChatGPT وتحليل السؤال بدقة..."):
+                try:
+                    response = openai.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {"role": "system", "content": "أنت خبير أكاديمي في الهيدرولوجيا، المناخ، والاستشعار عن بعد في حوض النيل الأزرق."},
+                            {"role": "user", "content": user_query}
+                        ],
+                        temperature=0.7
+                    )
+                    answer = response.choices[0].message.content
+                    st.success("تم إتمام التحليل والإجابة بنجاح!")
+                    st.markdown(f"### الإجابة العلمية المعتمدة:")
+                    st.markdown(f"> {answer}")
+                    
                     try:
-                        response = openai.chat.completions.create(
-                            model="gpt-3.5-turbo",
-                            messages=[
-                                {"role": "system", "content": "أنت خبير أكاديمي في الهيدرولوجيا، المناخ، والاستشعار عن بعد في حوض النيل الأزرق."},
-                                {"role": "user", "content": user_query}
-                            ],
-                            temperature=0.7
-                        )
-                        answer = response.choices[0].message.content
-                        st.success("تم إتمام التحليل والإجابة بنجاح!")
-                        st.markdown(f"### الإجابة العلمية المعتمدة:")
-                        st.markdown(f"> {answer}")
-                        
-                        try:
-                            tts = gTTS(text=answer[:500], lang='ar', slow=False)
-                            audio_file = "chatgpt_output.mp3"
-                            tts.save(audio_file)
-                            st.audio(audio_file, format='audio/mp3')
-                        except:
-                            pass
-                    except Exception as e:
-                        st.error(f"حدث خطأ أثناء الاتصال بخدمة ChatGPT: {e}")
+                        tts = gTTS(text=answer[:500], lang='ar', slow=False)
+                        audio_file = "chatgpt_output.mp3"
+                        tts.save(audio_file)
+                        st.audio(audio_file, format='audio/mp3')
+                    except:
+                        pass
+                except Exception as e:
+                    st.error(f"حدث خطأ أثناء الاتصال بخدمة ChatGPT: {e}")
         else:
             st.warning("الرجاء كتابة سؤال أولاً.")
 
@@ -201,7 +199,7 @@ elif section == t["sections"][4]:
 # ==========================================
 elif section == t["sections"][5]:
     st.title(f"📁 {t['sections'][5]}")
-    st.markdown("قم برفع ملفك النصي أو البحث (TXT أو جداول) ليقوم ChatGPT بقراءته كلياً وتحليل هدفه الرئيسي ومحتواه بدقة مذهلة دون أي أخطاء.")
+    st.markdown("قم برفع ملفك النصي أو البحث (TXT أو جداول) ليقوم ChatGPT بقراءته كلياً وتحليل هدفه الرئيسي ومحتواه بدقة مذهلة.")
     
     uploaded_file = st.file_uploader("اختر ملف البحث المرفوع:", type=["txt", "csv", "xlsx"])
     
@@ -221,7 +219,7 @@ elif section == t["sections"][5]:
                 
             if st.button("تحليل هذا الملف بالكامل باستخدام ChatGPT"):
                 if not openai.api_key:
-                    st.error("⚠️ يرجى إدخال مفتاح OpenAI API Key لتحليل الملف بالذكاء الاصطناعي.")
+                    st.error("⚠️ يرجى إدخال مفتاح OpenAI API Key في الشريط الجانبي أولاً.")
                 else:
                     with st.spinner("جاري إرسال محتوى الملف إلى ChatGPT وتحليل الأهداف والنتائج بدقة..."):
                         try:
